@@ -13,6 +13,7 @@ class RestApiDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: false),
       home: Home(),
     );

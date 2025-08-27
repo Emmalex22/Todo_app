@@ -24,7 +24,7 @@ class Controller extends GetxController {
   /// is in progress.
   final RxBool saving = false.obs;
   final RxBool loading = false.obs;
-  final String baseUrl = 'https://jsonplaceholder.typicode.com/Todos';
+  final String baseUrl = 'https://jsonplaceholder.typicode.com/todos';
 
   @override
   void onInit() {
