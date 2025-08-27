@@ -24,6 +24,9 @@ class TodosList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      if (controller.loading.value) {
+      return const Center(child: CircularProgressIndicator());
+      }
       final List<Todo> items = controller.todos.values.toList();
       items.sort((a, b) => (a.id ?? 0).compareTo(b.id ?? 0));
 

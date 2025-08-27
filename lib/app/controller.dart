@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 // import 'package:rest_api/todos_model.dart';
 
 import 'todo_model.dart';
-import 'dart:convert';
 
 /// The controller class responsible for fetching and maintaining the list of
 /// todos. It allows CRUD operations of creating a new todo, updating its
@@ -48,7 +47,7 @@ class Controller extends GetxController {
       loading.value = true;
       final response = await connect.get(baseUrl);
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+        final List<dynamic> data = (response.body);
         final mapped = <int, Todo> {
           for(final item in data)
             item['id'] as int: Todo.fromJson(item)
@@ -98,11 +97,12 @@ class Controller extends GetxController {
   Future<void> updateTodoStatus(int id, bool completed) async{
     try {
       saving.value = true;
-      final response = await connect.put('$baseUrl/$id', {'completed': completed});
+      final newstatus = !completed;
+      final response = await connect.put('$baseUrl/$id', {'completed': newstatus});
       if (response.statusCode == 200){
         final current = todos[id];
         if(current != null){
-          todos[id] = current.copyWith(completed: completed);
+          todos[id] = current.copyWith(completed: newstatus);
         }
         Get.snackbar('Success', 'Todo updated successfully');
       }
