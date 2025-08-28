@@ -80,7 +80,7 @@ class Controller extends GetxController {
       );
       if (response.statusCode == 201) {
         final Todo created = Todo.fromJson(response.body);
-        final id = created.id ?? DateTime.now().millisecondsSinceEpoch;
+        final int id = created.id ?? DateTime.now().millisecondsSinceEpoch;
         todos[id] = created.copyWith(id: id);
         titleController.clear();
         Get.snackbar('Success', 'Todo created successfully');
@@ -95,25 +95,35 @@ class Controller extends GetxController {
   }
   /// PUT request to update todo status.
   Future<void> updateTodoStatus(int id, bool completed) async{
-    try {
-      saving.value = true;
-      final newstatus = !completed;
+     try {
+    saving.value = true;
+    final newstatus = !completed;
+
+    // Check: Is this a real server todo or a locally created one?
+    if (id < 200) { 
+      // ✅ Likely a server todo (IDs from API are small numbers)
       final response = await connect.put('$baseUrl/$id', {'completed': newstatus});
-      if (response.statusCode == 200){
+      if (response.statusCode == 200) {
         final current = todos[id];
-        if(current != null){
+        if (current != null) {
           todos[id] = current.copyWith(completed: newstatus);
         }
         Get.snackbar('Success', 'Todo updated successfully');
       }
+    } else {
+      // ✅ Locally created todo → update only in state
+      final current = todos[id];
+      if (current != null) {
+        todos[id] = current.copyWith(completed: newstatus);
+        Get.snackbar('Success', 'Local todo updated');
+      }
     }
-    catch (e) {
-      Get.snackbar('Error', 'Could not update todo $e');
-    }
-    finally{
-      saving.value = false;
-    }
+  } catch (e) {
+    Get.snackbar('Error', 'Could not update todo $e');
+  } finally {
+    saving.value = false;
   }
+}
   /// DELETE request to delete a todo.
   Future<void> deleteTodo(int id) async{
     try{

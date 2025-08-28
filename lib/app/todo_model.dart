@@ -16,7 +16,7 @@ class Todo {
   // factory Todo.fromJson(Map<String, dynamic> json) => Todo(
   factory Todo.fromJson(Map <String, dynamic> json) {
     return Todo(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       title: json['title'] as String,
       completed: json['completed'] as bool,
     );
